@@ -1,0 +1,7 @@
+dataset/
+food-101/
+checkpoints/
+__pycache__/
+*.pyc
+*.pth
+*.png
