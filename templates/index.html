@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="AI-powered food recognition and calorie estimator. Upload a photo to instantly identify food and get nutritional breakdown.">
+    <title>BhojanLens — Food Recognition & Calorie Estimator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <!--  Sidebar  -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <span class="brand-logo">🍛</span>
+                <span class="brand-title">Bhojan<span class="accent">Lens</span></span>
+            </div>
+            <button class="mobile-toggle" id="mobile-toggle">☰</button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#upload-section" class="nav-link active">
+                <span class="nav-icon">📸</span>
+                <span class="nav-text">Detect Food</span>
+            </a>
+            <a href="#database-section" class="nav-link">
+                <span class="nav-icon">📖</span>
+                <span class="nav-text">Food Database</span>
+            </a>
+            <a href="#about-section" class="nav-link">
+                <span class="nav-icon">💡</span>
+                <span class="nav-text">How It Works</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p class="sidebar-copyright">© 2026 BhojanLens</p>
+        </div>
+    </aside>
+
+    <!--  Main Content  -->
+    <div class="main-content">
+
+        <!-- Welcome Banner -->
+        <header class="welcome-banner">
+            <div class="banner-content">
+                <div class="banner-badge">Welcome 🍽️</div>
+                <h1 class="banner-title">Welcome to BhojanLens</h1>
+                <p class="banner-subtitle">Your intelligent companion for food analysis. Upload any dish to instantly
+                    identify it and get a detailed nutritional breakdown — 28 cuisines supported.</p>
+            </div>
+            <div class="banner-art">
+                <div class="art-circle art-1"></div>
+                <div class="art-circle art-2"></div>
+                <div class="art-circle art-3"></div>
+            </div>
+        </header>
+
+        <main>
+            <!--  Upload Section  -->
+            <section id="upload-section" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Food Detector</h2>
+                    <p class="section-subtitle">Get instant calorie estimates from a photo</p>
+                </div>
+
+                <div class="upload-container">
+                    <!-- Upload Area -->
+                    <div class="upload-card glass-card">
+                        <div id="drop-zone" class="drop-zone">
+                            <div class="drop-zone-content" id="drop-zone-content">
+                                <div class="upload-icon-wrapper">
+                                    <svg class="upload-icon" viewBox="0 0 64 64" fill="none">
+                                        <rect x="8" y="8" width="48" height="48" rx="12" stroke="currentColor"
+                                            stroke-width="2" stroke-dasharray="6 4" />
+                                        <path d="M32 20v24M20 32h24" stroke="currentColor" stroke-width="2.5"
+                                            stroke-linecap="round" />
+                                        <circle cx="24" cy="24" r="4" stroke="currentColor" stroke-width="1.5"
+                                            opacity="0.5" />
+                                        <path d="M8 44l12-12 8 8 12-16 16 20" stroke="currentColor" stroke-width="1.5"
+                                            opacity="0.5" />
+                                    </svg>
+                                </div>
+                                <p class="drop-text">Drag & drop your food image here</p>
+                                <p class="drop-hint">or click to browse • PNG, JPG, WEBP up to 16MB</p>
+                                <button class="btn btn-primary" id="browse-btn">
+                                    <span class="btn-icon">📁</span> Choose Image
+                                </button>
+                            </div>
+                            <div class="preview-container" id="preview-container" style="display:none;">
+                                <img id="image-preview" class="image-preview" alt="Food preview">
+                                <button class="btn-remove" id="remove-image" title="Remove image">✕</button>
+                            </div>
+                            <input type="file" id="file-input"
+                                accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp" hidden>
+                        </div>
+
+                        <!-- Item Count Input -->
+                        <div class="count-section" id="count-section" style="display:none;">
+                            <label class="count-label" for="item-count">
+                                <span class="count-icon">🔢</span>
+                                How many items can you count? <span class="count-hint">(e.g., number of dumplings,
+                                    slices, pieces)</span>
+                            </label>
+                            <div class="count-input-group">
+                                <button class="count-btn" id="count-decrease">−</button>
+                                <input type="number" id="item-count" class="count-input" min="1" max="100" value="1">
+                                <button class="count-btn" id="count-increase">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Analyze Button -->
+                        <button class="btn btn-primary btn-xl btn-analyze" id="analyze-btn" disabled>
+                            <span class="btn-content">
+                                <span class="btn-icon">🔍</span>
+                                <span>Analyze Food</span>
+                            </span>
+                            <div class="btn-loader" style="display:none;">
+                                <div class="spinner"></div>
+                                <span>Analyzing...</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Initial Info State -->
+                    <div class="info-card glass-card" id="info-card">
+                        <h3>Not sure what to try?</h3>
+                        <p>Browse our food database below, or upload a picture of your meal!</p>
+                        <div class="quick-tips">
+                            <div class="tip">
+                                <span class="tip-icon">💡</span>
+                                <span>Ensure good lighting for best results</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-icon">🎯</span>
+                                <span>Focus clearly on the main dish</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-icon">🍕</span>
+                                <span>Try uploading Pizza, Sushi, or Ramen!</span>
+                            </div>
+                        </div>
+                        <div class="illustration-box">🍜</div>
+                    </div>
+
+                    <!-- Results Area -->
+                    <div class="results-card glass-card" id="results-card" style="display:none;">
+                        <div class="results-header">
+                            <div class="results-icon" id="results-icon">🍽️</div>
+                            <div>
+                                <h3 class="results-title" id="results-title">Food Detected!</h3>
+                                <p class="results-subtitle" id="results-subtitle"></p>
+                            </div>
+                        </div>
+
+                        <!-- Detected Food Info -->
+                        <div id="detected-info" style="display:none;">
+                            <div class="food-name-card">
+                                <h4 class="food-name" id="food-name"></h4>
+                                <p class="food-description" id="food-description"></p>
+                                <div class="confidence-bar-container">
+                                    <span class="confidence-label">Confidence</span>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill" id="confidence-fill"></div>
+                                    </div>
+                                    <span class="confidence-value" id="confidence-value">0%</span>
+                                </div>
+                            </div>
+
+                            <!-- Calorie Display -->
+                            <div class="calorie-display">
+                                <div class="calorie-ring">
+                                    <svg viewBox="0 0 160 160">
+                                        <circle cx="80" cy="80" r="70" class="ring-bg" />
+                                        <circle cx="80" cy="80" r="70" class="ring-fill" id="calorie-ring-fill" />
+                                    </svg>
+                                    <div class="calorie-center">
+                                        <span class="calorie-number" id="calorie-number">0</span>
+                                        <span class="calorie-unit">kcal</span>
+                                    </div>
+                                </div>
+                                <div class="calorie-details">
+                                    <div class="detail-item" id="serving-info">
+                                        <span class="detail-label">Serving</span>
+                                        <span class="detail-value" id="serving-value">—</span>
+                                    </div>
+                                    <div class="detail-item" id="count-info" style="display:none;">
+                                        <span class="detail-label">Count</span>
+                                        <span class="detail-value" id="count-value">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Macronutrients -->
+                            <div class="macros-grid">
+                                <div class="macro-card macro-protein">
+                                    <div class="macro-icon">🥩</div>
+                                    <span class="macro-value" id="protein-value">0g</span>
+                                    <span class="macro-label">Protein</span>
+                                    <div class="macro-bar">
+                                        <div class="macro-bar-fill" id="protein-bar"></div>
+                                    </div>
+                                </div>
+                                <div class="macro-card macro-carbs">
+                                    <div class="macro-icon">🌾</div>
+                                    <span class="macro-value" id="carbs-value">0g</span>
+                                    <span class="macro-label">Carbs</span>
+                                    <div class="macro-bar">
+                                        <div class="macro-bar-fill" id="carbs-bar"></div>
+                                    </div>
+                                </div>
+                                <div class="macro-card macro-fat">
+                                    <div class="macro-icon">🫒</div>
+                                    <span class="macro-value" id="fat-value">0g</span>
+                                    <span class="macro-label">Fat</span>
+                                    <div class="macro-bar">
+                                        <div class="macro-bar-fill" id="fat-bar"></div>
+                                    </div>
+                                </div>
+                                <div class="macro-card macro-fiber">
+                                    <div class="macro-icon">🥬</div>
+                                    <span class="macro-value" id="fiber-value">0g</span>
+                                    <span class="macro-label">Fiber</span>
+                                    <div class="macro-bar">
+                                        <div class="macro-bar-fill" id="fiber-bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Note -->
+                            <div class="result-note" id="result-note">
+                                <span class="note-icon">ℹ️</span>
+                                <span id="note-text"></span>
+                            </div>
+                        </div>
+
+                        <!-- Not Detected Info -->
+                        <div id="not-detected-info" style="display:none;">
+                            <div class="not-detected-card">
+                                <div class="not-detected-icon">🤔</div>
+                                <p class="not-detected-message" id="not-detected-message"></p>
+                                <p class="not-detected-suggestion" id="not-detected-suggestion"></p>
+                            </div>
+                        </div>
+
+                        <!-- Top Predictions -->
+                        <div class="predictions-section" id="predictions-section" style="display:none;">
+                            <h4 class="predictions-title">🧠 Model Predictions</h4>
+                            <div class="predictions-list" id="predictions-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--  Food Database Section  -->
+            <section id="database-section" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Food Database</h2>
+                    <p class="section-subtitle">Browse all 28 supported food categories</p>
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all" id="filter-all">All Foods</button>
+                    <button class="filter-tab" data-filter="asian" id="filter-asian">🥢 Asian</button>
+                    <button class="filter-tab" data-filter="western" id="filter-western">🍔 Western</button>
+                    <button class="filter-tab" data-filter="dessert" id="filter-dessert">🍰 Desserts</button>
+                    <button class="filter-tab" data-filter="healthy" id="filter-healthy">🥗 Healthy</button>
+                </div>
+
+                <!-- Search -->
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="food-search" class="search-input" placeholder="Search for a food item...">
+                </div>
+
+                <!-- Food Grid -->
+                <div class="food-grid" id="food-grid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </section>
+
+            <!--  About Section  -->
+            <section id="about-section" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">How It Works</h2>
+                    <p class="section-subtitle">Our AI pipeline from image upload to calorie estimation</p>
+                </div>
+
+                <div class="how-it-works">
+                    <div class="step-card glass-card">
+                        <div class="step-number">01</div>
+                        <div class="step-icon">📸</div>
+                        <h3 class="step-title">Upload Image</h3>
+                        <p class="step-desc">Take a photo or upload an image of your food. Supports PNG, JPG, and WebP
+                            formats up to 16MB.</p>
+                    </div>
+                    <div class="step-connector">
+                        <svg viewBox="0 0 60 20">
+                            <path d="M0 10h50m-8-6l8 6-8 6" stroke="currentColor" stroke-width="2" fill="none" />
+                        </svg>
+                    </div>
+                    <div class="step-card glass-card">
+                        <div class="step-number">02</div>
+                        <div class="step-icon">🧠</div>
+                        <h3 class="step-title">AI Detection</h3>
+                        <p class="step-desc">ResNet50 CNN, fine-tuned on Food-101, processes the image through deep
+                            learning to identify the food item with confidence scoring.</p>
+                    </div>
+                    <div class="step-connector">
+                        <svg viewBox="0 0 60 20">
+                            <path d="M0 10h50m-8-6l8 6-8 6" stroke="currentColor" stroke-width="2" fill="none" />
+                        </svg>
+                    </div>
+                    <div class="step-card glass-card">
+                        <div class="step-number">03</div>
+                        <div class="step-icon">📊</div>
+                        <h3 class="step-title">Calorie Estimate</h3>
+                        <p class="step-desc">Detected food is mapped to our USDA-sourced nutritional database for
+                            instant calorie and macronutrient breakdown.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- SVG Gradient Definition for Calorie Ring -->
+    <svg style="position:absolute;width:0;height:0;">
+        <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#c4501a" />
+                <stop offset="100%" stop-color="#d4930d" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- Manual Lookup Result (Global Modal) -->
+    <div class="manual-result glass-card" id="manual-result" style="display:none;">
+        <button class="btn-close" id="close-manual-result">✕</button>
+        <div id="manual-result-content"></div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+
+</html>
