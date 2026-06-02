@@ -9,203 +9,219 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <nav class="topbar">
-        <div class="logo-container">
-            <svg class="logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 17h20"></path>
-                <path d="M12 2a2 2 0 0 0-2 2"></path>
-                <path d="M4 17a8 8 0 0 1 16 0"></path>
-            </svg>
-            <span class="logo-text">NutriLens</span>
-        </div>
-        <div class="nav-links">
-            <button class="nav-btn active" data-tab="tab-home">Home</button>
-            <button class="nav-btn" data-tab="tab-analyze">Analyze</button>
-            <button class="nav-btn" data-tab="tab-foods">Foods</button>
-        </div>
-    </nav>
-
-    <main class="content-wrapper">
-        
-        <!-- 1. HOME TAB -->
-        <section id="tab-home" class="tab-content active">
-            <div class="hero-card">
-                <div class="hero-blob"></div>
-                <h1>Discover what's on your plate.</h1>
-                <p>NutriLens uses a trained neural network to identify your food and estimate its nutritional value in seconds. Sweet, simple, and beautifully accurate.</p>
-                <button class="action-btn primary-btn mt-4" id="go-to-analyze">Start Scanning</button>
+    <div class="app-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <svg class="logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 17h20"></path>
+                    <path d="M12 2a2 2 0 0 0-2 2"></path>
+                    <path d="M4 17a8 8 0 0 1 16 0"></path>
+                </svg>
+                <span class="logo-text">NutriLens</span>
             </div>
-
-            <div class="how-it-works">
-                <h2 class="section-title">How it works</h2>
-                <div class="steps-container">
-                    <div class="step-box">
-                        <div class="step-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                        </div>
-                        <h3>1. Snap a picture</h3>
-                        <p>Upload a clear photo of your dish. Single items work best.</p>
-                    </div>
-                    <div class="step-box">
-                        <div class="step-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                        </div>
-                        <h3>2. AI analyzes it</h3>
-                        <p>Our model compares it against 32 known food categories.</p>
-                    </div>
-                    <div class="step-box">
-                        <div class="step-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                        </div>
-                        <h3>3. Get nutrition facts</h3>
-                        <p>Receive estimated calories, protein, carbs, and fats instantly.</p>
-                    </div>
-                </div>
+            <div class="nav-links">
+                <button class="nav-btn active" data-tab="tab-home">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span class="nav-label">Home</span>
+                </button>
+                <button class="nav-btn" data-tab="tab-analyze">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <span class="nav-label">Analyze</span>
+                </button>
+                <button class="nav-btn" data-tab="tab-foods">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                    <span class="nav-label">Foods Database</span>
+                </button>
             </div>
-        </section>
+        </aside>
 
-        <!-- 2. ANALYZE TAB -->
-        <section id="tab-analyze" class="tab-content">
-            <div class="analyze-layout">
-                <div class="upload-panel panel-card">
-                    <h2 class="panel-title">Scan your meal</h2>
-                    <div class="upload-box" id="drop-zone">
-                        <div id="drop-zone-content">
-                            <div class="upload-icon-large">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                
+                <!-- 1. HOME TAB -->
+                <section id="tab-home" class="tab-content active">
+                    <div class="hero-card">
+                        <div class="hero-blob"></div>
+                        <h1>Discover what's on your plate.</h1>
+                        <p>NutriLens uses a trained neural network to identify your food and estimate its nutritional value in seconds. Sweet, simple, and beautifully accurate.</p>
+                        <button class="action-btn primary-btn mt-4" id="go-to-analyze">Start Scanning</button>
+                    </div>
+
+                    <div class="how-it-works">
+                        <h2 class="section-title">How it works</h2>
+                        <div class="steps-container">
+                            <div class="step-box">
+                                <div class="step-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                </div>
+                                <h3>1. Snap a picture</h3>
+                                <p>Upload a clear photo of your dish. Single items work best.</p>
                             </div>
-                            <p>Drag & drop an image</p>
-                            <span class="upload-or">or</span>
-                            <button class="text-btn" id="browse-btn">browse your files</button>
+                            <div class="step-box">
+                                <div class="step-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                </div>
+                                <h3>2. AI analyzes it</h3>
+                                <p>Our model compares it against 32 known food categories.</p>
+                            </div>
+                            <div class="step-box">
+                                <div class="step-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                </div>
+                                <h3>3. Get nutrition facts</h3>
+                                <p>Receive estimated calories, protein, carbs, and fats instantly.</p>
+                            </div>
                         </div>
-                        <div id="preview-container" style="display:none;">
-                            <img id="image-preview" alt="Preview">
-                            <button class="remove-btn" id="remove-image">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </div>
+                </section>
+
+                <!-- 2. ANALYZE TAB -->
+                <section id="tab-analyze" class="tab-content">
+                    <div class="analyze-layout">
+                        <div class="upload-panel panel-card">
+                            <h2 class="panel-title">Scan your meal</h2>
+                            <div class="upload-box" id="drop-zone">
+                                <div id="drop-zone-content">
+                                    <div class="upload-icon-large">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                    </div>
+                                    <p>Drag & drop an image</p>
+                                    <span class="upload-or">or</span>
+                                    <button class="text-btn" id="browse-btn">browse your files</button>
+                                </div>
+                                <div id="preview-container" style="display:none;">
+                                    <img id="image-preview" alt="Preview">
+                                    <button class="remove-btn" id="remove-image">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    </button>
+                                </div>
+                                <input type="file" id="file-input" accept="image/*" hidden>
+                            </div>
+
+                            <div class="controls-row" id="count-section" style="display:none; flex-direction:column; align-items:flex-start; gap:12px;">
+                                <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                                    <span class="controls-label">Portion</span>
+                                    <div class="toggle-switch">
+                                        <button type="button" class="toggle-btn active" data-type="grams">Grams</button>
+                                        <button type="button" class="toggle-btn" data-type="items">Items</button>
+                                    </div>
+                                </div>
+                                <div class="counter-widget" style="width:100%; justify-content:space-between;">
+                                    <button id="count-decrease" type="button">−</button>
+                                    <input type="number" id="item-count" value="100" min="1" step="10" style="width:100%;">
+                                    <button id="count-increase" type="button">+</button>
+                                </div>
+                            </div>
+
+                            <button class="action-btn primary-btn full-width mt-4" id="analyze-btn" disabled>
+                                <span class="btn-text">Analyze Nutrition</span>
+                                <span class="btn-loading" style="display:none;">
+                                    <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+                                    Analyzing...
+                                </span>
                             </button>
                         </div>
-                        <input type="file" id="file-input" accept="image/*" hidden>
-                    </div>
 
-                    <div class="controls-row" id="count-section" style="display:none; flex-direction:column; align-items:flex-start; gap:12px;">
-                        <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-                            <span class="controls-label">Portion</span>
-                            <div class="toggle-switch">
-                                <button type="button" class="toggle-btn active" data-type="grams">Grams</button>
-                                <button type="button" class="toggle-btn" data-type="items">Items</button>
-                            </div>
-                        </div>
-                        <div class="counter-widget" style="width:100%; justify-content:space-between;">
-                            <button id="count-decrease" type="button">−</button>
-                            <input type="number" id="item-count" value="100" min="1" step="10" style="width:100%;">
-                            <button id="count-increase" type="button">+</button>
-                        </div>
-                    </div>
-
-                    <button class="action-btn primary-btn full-width mt-4" id="analyze-btn" disabled>
-                        <span class="btn-text">Analyze Nutrition</span>
-                        <span class="btn-loading" style="display:none;">
-                            <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
-                            Analyzing...
-                        </span>
-                    </button>
-                </div>
-
-                <div class="results-panel panel-card" id="results-placeholder">
-                    <div class="empty-state">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                        <p>Upload a photo to see results</p>
-                    </div>
-                </div>
-
-                <div class="results-panel panel-card" id="results-display" style="display:none;">
-                    
-                    <div id="result-success" style="display:none;">
-                        <div class="result-header">
-                            <div>
-                                <h2 class="food-title" id="food-name">...</h2>
-                                <p class="food-subtitle" id="food-description">...</p>
-                            </div>
-                            <div class="confidence-badge">
-                                <span id="confidence-value">0%</span> match
+                        <div class="results-panel panel-card" id="results-placeholder">
+                            <div class="empty-state">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                <p>Upload a photo to see results</p>
                             </div>
                         </div>
 
-                        <div class="calorie-showcase">
-                            <span class="cal-number" id="calorie-number">0</span>
-                            <div class="cal-meta">
-                                <span class="cal-unit">kcal</span>
-                                <span class="cal-serving" id="serving-value"></span>
-                            </div>
-                        </div>
+                        <div class="results-panel panel-card" id="results-display" style="display:none;">
+                            
+                            <div id="result-success" style="display:none;">
+                                <div class="result-header">
+                                    <div>
+                                        <h2 class="food-title" id="food-name">...</h2>
+                                        <p class="food-subtitle" id="food-description">...</p>
+                                    </div>
+                                    <div class="confidence-badge">
+                                        <span id="confidence-value">0%</span> match
+                                    </div>
+                                </div>
 
-                        <div class="macro-grid">
-                            <div class="macro-item">
-                                <span class="m-label">Protein</span>
-                                <span class="m-val" id="protein-value">0g</span>
-                            </div>
-                            <div class="macro-item">
-                                <span class="m-label">Carbs</span>
-                                <span class="m-val" id="carbs-value">0g</span>
-                            </div>
-                            <div class="macro-item">
-                                <span class="m-label">Fat</span>
-                                <span class="m-val" id="fat-value">0g</span>
-                            </div>
-                            <div class="macro-item">
-                                <span class="m-label">Fiber</span>
-                                <span class="m-val" id="fiber-value">0g</span>
-                            </div>
-                        </div>
+                                <div class="calorie-showcase">
+                                    <span class="cal-number" id="calorie-number">0</span>
+                                    <div class="cal-meta">
+                                        <span class="cal-unit">kcal</span>
+                                        <span class="cal-serving" id="serving-value"></span>
+                                    </div>
+                                </div>
 
-                        <div class="result-note" id="result-note" style="display:none;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            <span id="note-text"></span>
+                                <div class="macro-grid">
+                                    <div class="macro-item">
+                                        <span class="m-label">Protein</span>
+                                        <span class="m-val" id="protein-value">0g</span>
+                                    </div>
+                                    <div class="macro-item">
+                                        <span class="m-label">Carbs</span>
+                                        <span class="m-val" id="carbs-value">0g</span>
+                                    </div>
+                                    <div class="macro-item">
+                                        <span class="m-label">Fat</span>
+                                        <span class="m-val" id="fat-value">0g</span>
+                                    </div>
+                                    <div class="macro-item">
+                                        <span class="m-label">Fiber</span>
+                                        <span class="m-val" id="fiber-value">0g</span>
+                                    </div>
+                                </div>
+
+                                <div class="result-note" id="result-note" style="display:none;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    <span id="note-text"></span>
+                                </div>
+                            </div>
+
+                            <div id="result-fail" style="display:none;" class="empty-state">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                                <h3 class="mt-4">Couldn't confidently identify this dish</h3>
+                                <p id="not-detected-message" class="text-sm mt-2"></p>
+                                <p id="not-detected-suggestion" class="text-xs text-muted mt-2"></p>
+                                
+                                <div id="fallback-container" style="display:none; margin-top:24px; width:100%;">
+                                    <h4 style="font-size:14px; margin-bottom:12px; color:var(--color-dark); font-family:'Outfit', sans-serif;">Did you mean?</h4>
+                                    <div id="fallback-buttons" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;"></div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
+                </section>
 
-                    <div id="result-fail" style="display:none;" class="empty-state">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-                        <h3 class="mt-4">Couldn't confidently identify this dish</h3>
-                        <p id="not-detected-message" class="text-sm mt-2"></p>
-                        <p id="not-detected-suggestion" class="text-xs text-muted mt-2"></p>
-                        
-                        <div id="fallback-container" style="display:none; margin-top:24px; width:100%;">
-                            <h4 style="font-size:14px; margin-bottom:12px; color:var(--color-dark); font-family:'Outfit', sans-serif;">Did you mean?</h4>
-                            <div id="fallback-buttons" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;"></div>
+                <!-- 3. FOODS TAB -->
+                <section id="tab-foods" class="tab-content">
+                    <div class="foods-header">
+                        <h2 class="section-title">Food Database</h2>
+                        <p>Browse the 32 delicacies our model is trained to recognize.</p>
+                    </div>
+
+                    <div class="foods-toolbar">
+                        <div class="filter-group">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="asian">Asian</button>
+                            <button class="filter-btn" data-filter="western">Western</button>
+                            <button class="filter-btn" data-filter="dessert">Desserts</button>
+                            <button class="filter-btn" data-filter="healthy">Healthy</button>
+                        </div>
+                        <div class="search-box">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="food-search" placeholder="Search foods...">
                         </div>
                     </div>
 
-                </div>
+                    <div class="food-grid" id="food-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
             </div>
-        </section>
-
-        <!-- 3. FOODS TAB -->
-        <section id="tab-foods" class="tab-content">
-            <div class="foods-header">
-                <h2 class="section-title">Food Database</h2>
-                <p>Browse the 32 delicacies our model is trained to recognize.</p>
-            </div>
-
-            <div class="foods-toolbar">
-                <div class="filter-group">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="asian">Asian</button>
-                    <button class="filter-btn" data-filter="western">Western</button>
-                    <button class="filter-btn" data-filter="dessert">Desserts</button>
-                    <button class="filter-btn" data-filter="healthy">Healthy</button>
-                </div>
-                <div class="search-box">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" id="food-search" placeholder="Search foods...">
-                </div>
-            </div>
-
-            <div class="food-grid" id="food-grid">
-                <!-- Populated by JS -->
-            </div>
-        </section>
-    </main>
+        </main>
+    </div>
 
     <!-- Modal -->
     <div class="modal-backdrop" id="modal-backdrop" style="display:none;">

@@ -6,7 +6,7 @@ const categories = {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    // 1. Tab Navigation
+
     const navBtns = document.querySelectorAll('.nav-btn');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    // 2. Analyze Tab Logic
+
     const dropZone = document.getElementById('drop-zone');
     const dropContent = document.getElementById('drop-zone-content');
     const previewContainer = document.getElementById('preview-container');
@@ -112,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Counter
     countDecrease.addEventListener('click', () => {
         let v = parseInt(itemCount.value) || (currentPortionType === 'grams' ? 100 : 1);
         let step = currentPortionType === 'grams' ? 10 : 1;
@@ -124,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
         itemCount.value = v + step;
     });
 
-    // Analyze Action
     analyzeBtn.addEventListener('click', async () => {
         if (!selectedFile) return;
 
@@ -253,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    // 3. Foods Tab Logic
+
     const foodGrid = document.getElementById('food-grid');
     const searchBox = document.getElementById('food-search');
     const filterBtns = document.querySelectorAll('.filter-btn');
@@ -282,7 +280,6 @@ document.addEventListener('DOMContentLoaded', function () {
         foodGrid.innerHTML = foods.map(f => {
             return `
             <div class="food-card" onclick="window._lookupFood('${f.key}')">
-                <div class="f-icon">${f.emoji || '🍽️'}</div>
                 <div class="f-name">${f.name}</div>
                 <div class="f-cat">${f.category.replace('_', ' ')}</div>
                 <div class="f-cal">${f.calories} <span>kcal / ${f.serving_size}</span></div>
@@ -319,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadFoods();
 
 
-    // 4. Modal Logic
+
     const modalBackdrop = document.getElementById('modal-backdrop');
     const closeModalBtn = document.getElementById('close-modal');
     const modalContent = document.getElementById('modal-content');

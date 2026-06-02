@@ -47,16 +47,23 @@ h1, h2, h3, .logo-text, .food-title, .f-cal, .cal-number {
 .text-muted { color: var(--text-muted); }
 .full-width { width: 100%; }
 
-/* --- Top Navigation --- */
-.topbar {
+
+.app-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 40px;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
     background: var(--bg-main);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
+    border-right: 1px solid var(--border);
+    padding: 40px 24px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
     top: 0;
+    left: 0;
     z-index: 100;
 }
 
@@ -65,51 +72,63 @@ h1, h2, h3, .logo-text, .food-title, .f-cal, .cal-number {
     align-items: center;
     gap: 12px;
     color: var(--color-caramel);
+    margin-bottom: 48px;
+    padding-left: 8px;
 }
 
 .logo-text {
-    font-size: 20px;
-    font-weight: 800;
+    font-size: 24px;
+    font-weight: 900;
     letter-spacing: -0.5px;
     color: var(--color-dark);
 }
 
 .nav-links {
     display: flex;
+    flex-direction: column;
     gap: 8px;
-    background: var(--bg-card);
-    padding: 4px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
 }
 
 .nav-btn {
     background: transparent;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 12px;
+    border: 1px solid transparent;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
     font-family: inherit;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 15px;
     color: var(--text-muted);
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: all 0.2s ease;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .nav-btn:hover {
     color: var(--color-dark);
+    background: rgba(192, 88, 0, 0.05);
 }
 
 .nav-btn.active {
-    background: var(--color-cream);
+    background: var(--bg-card);
     color: var(--color-caramel);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(56, 36, 13, 0.05);
 }
 
-/* --- Layout --- */
-.content-wrapper {
-    max-width: 900px;
-    margin: 0 auto;
+.main-content {
+    flex: 1;
+    margin-left: 260px;
     padding: 40px 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 900px;
 }
 
 .tab-content {
@@ -133,7 +152,7 @@ h1, h2, h3, .logo-text, .food-title, .f-cal, .cal-number {
     margin-bottom: 24px;
 }
 
-/* --- Buttons --- */
+
 .action-btn {
     font-family: inherit;
     font-size: 15px;
@@ -180,7 +199,7 @@ h1, h2, h3, .logo-text, .food-title, .f-cal, .cal-number {
     cursor: pointer;
 }
 
-/* --- Cards --- */
+
 .panel-card {
     background: var(--bg-card);
     border-radius: var(--radius-lg);
@@ -189,7 +208,7 @@ h1, h2, h3, .logo-text, .food-title, .f-cal, .cal-number {
     border: 1px solid var(--border);
 }
 
-/* --- Tab 1: Home --- */
+
 .hero-card {
     text-align: center;
     padding: 80px 24px;
@@ -282,7 +301,7 @@ h1, h2, h3, .logo-text, .food-title, .f-cal, .cal-number {
     color: var(--text-muted);
 }
 
-/* --- Tab 2: Analyze --- */
+
 .analyze-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -600,7 +619,7 @@ h1, h2, h3, .logo-text, .food-title, .f-cal, .cal-number {
     flex-shrink: 0;
 }
 
-/* --- Tab 3: Foods --- */
+
 .foods-header {
     margin-bottom: 32px;
 }
@@ -750,7 +769,7 @@ h1, h2, h3, .logo-text, .food-title, .f-cal, .cal-number {
     border-radius: 6px;
 }
 
-/* --- Modal --- */
+
 .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -795,7 +814,35 @@ h1, h2, h3, .logo-text, .food-title, .f-cal, .cal-number {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    .app-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+    .logo-container {
+        margin-bottom: 0;
+        padding-left: 0;
+    }
+    .nav-links {
+        flex-direction: row;
+    }
+    .nav-btn .nav-label {
+        display: none;
+    }
+    .main-content {
+        margin-left: 0;
+        padding: 24px 16px;
+    }
     .analyze-layout {
         grid-template-columns: 1fr;
     }
