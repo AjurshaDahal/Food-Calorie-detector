@@ -73,7 +73,7 @@ class FoodClassifier:
               f"val_acc={val_acc:.3f}, device={self.device}")
 
     @torch.no_grad()
-    def predict(self, image_path: str, item_count: int = None) -> dict:
+    def predict(self, image_path: str, portion_type: str = "grams", portion_value: int = None) -> dict:
         """
         Classify a food image and return nutrition data.
 
@@ -87,7 +87,7 @@ class FoodClassifier:
             note
         }
         """
-        count = max(int(item_count), 1) if item_count else 1
+        val = max(int(portion_value), 1) if portion_value else None
 
         # If model not loaded, return graceful error
         if self.model is None:
@@ -136,15 +136,14 @@ class FoodClassifier:
             }
 
         # Get nutrition data
-        nutrition = calculate_total_calories(best_food, count)
+        nutrition = calculate_total_calories(best_food, portion_type, val)
         if nutrition is None:
+            v = val if val else (100 if portion_type == "grams" else 1)
             nutrition = {
                 "food_name": best_food.replace("_", " ").title(),
                 "description": FOOD_DESCRIPTIONS.get(best_food, "Delicious food item"),
-                "serving_size": "unknown",
+                "serving_size": f"{v}g" if portion_type == "grams" else f"{v} item(s)",
                 "total_calories": 0,
-                "calories_per_unit": 0,
-                "count": count,
                 "protein_g": 0, "carbs_g": 0, "fat_g": 0, "fiber_g": 0,
             }
 

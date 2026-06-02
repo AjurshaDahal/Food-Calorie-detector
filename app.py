@@ -74,7 +74,7 @@ def analyze_food():
     
     Accepts:
         - image file (multipart/form-data)
-        - item_count (optional): number of items for countable foods
+        - portion_size_g (optional): exact portion weight in grams
         
     Returns:
         JSON with food identification and nutritional information
@@ -102,16 +102,17 @@ def analyze_food():
         filepath = os.path.join(app.config["UPLOAD_FOLDER"], unique_filename)
         file.save(filepath)
 
-        # Get optional item count
-        item_count = request.form.get("item_count", None)
-        if item_count:
+        # Get optional portion type and value
+        portion_type = request.form.get("portion_type", "grams")
+        portion_value = request.form.get("portion_value", None)
+        if portion_value:
             try:
-                item_count = int(item_count)
+                portion_value = int(portion_value)
             except ValueError:
-                item_count = None
+                portion_value = None
 
         # Run food classification
-        result = classifier.predict(filepath, item_count)
+        result = classifier.predict(filepath, portion_type, portion_value)
         result["image_url"] = f"/static/uploads/{unique_filename}"
 
         return jsonify(result)
@@ -136,15 +137,16 @@ def manual_lookup():
         return jsonify({"success": False, "error": "food_key is required"}), 400
 
     food_key = data["food_key"]
-    count = data.get("count", None)
+    portion_type = data.get("portion_type", "grams")
+    portion_value = data.get("portion_value", None)
 
-    if count:
+    if portion_value:
         try:
-            count = int(count)
+            portion_value = int(portion_value)
         except ValueError:
-            count = None
+            portion_value = None
 
-    nutrition = calculate_total_calories(food_key, count)
+    nutrition = calculate_total_calories(food_key, portion_type, portion_value)
 
     if nutrition:
         return jsonify({"success": True, "nutrition": nutrition})

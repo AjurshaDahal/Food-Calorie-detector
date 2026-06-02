@@ -1,6 +1,5 @@
 """
 Calorie Database Module
-========================
 Wraps the project's NUTRITION_DB and DEFAULT_SERVING_G from inference.py
 into the API surface that app.py and the frontend expect.
 """
@@ -88,19 +87,6 @@ FOOD_CATEGORIES = {
 
 }
 
-# Emoji icons per food for the database grid
-FOOD_EMOJIS = {
-    "pizza": "🍕", "hot_dog": "🌭", "french_fries": "🍟", "fried_rice": "🍚",
-    "sushi": "🍣", "ramen": "🍜", "pad_thai": "🍝", "dumplings": "🥟",
-    "spring_rolls": "🥢", "grilled_salmon": "🐟", "chicken_curry": "🍛",
-    "bibimbap": "🍲", "pho": "🍲", "tacos": "🌮", "nachos": "🧀",
-    "waffles": "🧇", "pancakes": "🥞", "omelette": "🍳",
-    "caesar_salad": "🥗", "greek_salad": "🥗",
-    "chocolate_cake": "🍫", "cheesecake": "🍰", "ice_cream": "🍨",
-    "donuts": "🍩", "apple_pie": "🥧", "strawberry_shortcake": "🍓",
-    "miso_soup": "🍵", "edamame": "🫘", "burger":   "🍔", "dal_bhat": "🍛",
-    "kheer":    "🍮", "sel_roti": "🍩",
-}
 
 
 def get_food_info(food_key: str) -> dict | None:
@@ -119,7 +105,6 @@ def get_food_info(food_key: str) -> dict | None:
         "food_name": key.replace("_", " ").title(),
         "description": FOOD_DESCRIPTIONS.get(key, "Delicious food item"),
         "category": FOOD_CATEGORIES.get(key, "other"),
-        "emoji": FOOD_EMOJIS.get(key, "🍽️"),
         "serving_size": f"{serving_g}g",
         "calories_per_serving": round(n["calories"] * f),
         "protein_g": round(n["protein"] * f, 1),
@@ -131,31 +116,57 @@ def get_food_info(food_key: str) -> dict | None:
     }
 
 
-def calculate_total_calories(food_key: str, count: int = None) -> dict | None:
+SINGLE_UNIT_WEIGHT_G = {
+    "dumplings": 25,
+    "pizza": 107,
+    "hot_dog": 98,
+    "sushi": 30,
+    "spring_rolls": 50,
+    "burger": 150,
+    "donuts": 60,
+    "waffles": 130,
+    "pancakes": 75,
+    "tacos": 85,
+    "sel_roti": 80,
+}
+
+def calculate_total_calories(food_key: str, portion_type: str = "grams", portion_value: int = None) -> dict | None:
     """
-    Get full nutrition for a food, optionally multiplied by count.
+    Get full nutrition for a food, based on exact gram portion size or count.
     Returns the structure the frontend modal expects.
     """
-    info = get_food_info(food_key)
-    if info is None:
+    key = food_key.lower().replace(" ", "_")
+    n = NUTRITION_DB.get(key)
+    if n is None:
         return None
+        
+    info = get_food_info(food_key)
 
-    c = max(int(count), 1) if count else 1
-    total_cal = info["calories_per_serving"] * c
+    if portion_type == "count" or portion_type == "items":
+        c = max(int(portion_value), 1) if portion_value else 1
+        unit_g = SINGLE_UNIT_WEIGHT_G.get(key, DEFAULT_SERVING_G.get(key, 100))
+        grams = unit_g * c
+        serving_str = f"{c} item(s) (~{grams}g)"
+    else:
+        grams = max(int(portion_value), 1) if portion_value else DEFAULT_SERVING_G.get(key, 100)
+        serving_str = f"{grams}g"
+    
+    # NUTRITION_DB is per 100g. 
+    f = grams / 100.0
+
+    total_cal = round(n["calories"] * f)
 
     return {
         "food_name": info["food_name"],
         "description": info["description"],
-        "serving_size": info["serving_size"],
-        "calories_per_unit": info["calories_per_serving"],
+        "serving_size": serving_str,
         "total_calories": total_cal,
-        "count": c,
-        "protein_g": round(info["protein_g"] * c, 1),
-        "carbs_g": round(info["carbs_g"] * c, 1),
-        "fat_g": round(info["fat_g"] * c, 1),
-        "fiber_g": round(info["fiber_g"] * c, 1),
-        "sugar_g": round(info["sugar_g"] * c, 1),
-        "sodium_mg": round(info["sodium_mg"] * c),
+        "protein_g": round(n["protein"] * f, 1),
+        "carbs_g": round(n["carbs"] * f, 1),
+        "fat_g": round(n["fat"] * f, 1),
+        "fiber_g": round(n["fiber"] * f, 1),
+        "sugar_g": round(n["sugar"] * f, 1),
+        "sodium_mg": round(n["sodium"] * f),
     }
 
 
@@ -172,7 +183,6 @@ def get_all_foods() -> list[dict]:
         foods.append({
             "key": key,
             "name": info["food_name"],
-            "emoji": info["emoji"],
             "description": info["description"],
             "category": info["category"],
             "calories": info["calories_per_serving"],
