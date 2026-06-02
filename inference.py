@@ -37,6 +37,11 @@ NUTRITION_DB = {
     "strawberry_shortcake": {"calories":280,"protein":4.5, "carbs":40.0,"fat":12.0,"fiber":1.0,"sugar":22.0,"sodium":240},
     "miso_soup":            {"calories":40, "protein":3.0, "carbs":4.5, "fat":1.0, "fiber":0.8,"sugar":1.0,"sodium":630},
     "edamame":              {"calories":122,"protein":11.0,"carbs":9.0, "fat":5.0, "fiber":5.0,"sugar":2.0,"sodium":6},
+    "burger":               {"calories":295,"protein":17.0,"carbs":24.0,"fat":14.0,"fiber":1.5,"sugar":5.0,"sodium":510},
+    "dal_bhat":              {"calories":130,"protein":5.0, "carbs":25.0,"fat":1.5, "fiber":3.0,"sugar":1.0,"sodium":280},
+    "kheer":                {"calories":150,"protein":4.0, "carbs":28.0,"fat":3.5, "fiber":0.2,"sugar":20.0,"sodium":60},
+    "sel_roti":              {"calories":320,"protein":4.5, "carbs":52.0,"fat":10.0,"fiber":1.0,"sugar":8.0,"sodium":180},
+
 }
 
 DEFAULT_SERVING_G = {
@@ -48,6 +53,7 @@ DEFAULT_SERVING_G = {
     "greek_salad":150,"chocolate_cake":100,"cheesecake":125,
     "ice_cream":132,"donuts":60,"apple_pie":155,
     "strawberry_shortcake":150,"miso_soup":240,"edamame":155,
+    "burger":150,"dal_bhat":400,"kheer":150,"sel_roti":80,
 }
 
 PORTION_MULTIPLIERS = {"Small":0.6, "Medium":1.0, "Large":1.5, "XL":2.0}

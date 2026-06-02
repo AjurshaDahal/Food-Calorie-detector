@@ -4,7 +4,7 @@
 
 // Category groupings for filter tabs
 const CATEGORY_GROUPS = {
-    asian: ['japanese', 'korean', 'thai', 'vietnamese', 'asian', 'indian'],
+    asian: ['japanese', 'korean', 'thai', 'vietnamese', 'asian', 'indian' , 'nepali'],
     western: ['american', 'italian', 'mexican', 'breakfast'],
     dessert: ['dessert'],
     healthy: ['salad', 'seafood'],

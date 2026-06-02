@@ -10,31 +10,38 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 FOOD101_ROOT = "./food-101"
+PARIKAR_ROOT = "./parikar"
 
+PARIKAR_CLASSES = {
+    "burger":   "Burger",
+    "dal_bhat": "Dalbhat",
+    "kheer":    "Kheer",
+    "sel_roti": "Selroti",
+}
 
-OUTPUT_DIR   = "./dataset"
+OUTPUT_DIR = "./dataset"
 
-# Full list: https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/
 SELECTED_CLASSES = [
     "pizza", "hot_dog", "french_fries", "fried_rice",
     "sushi", "ramen", "pad_thai", "dumplings", "spring_rolls",
     "grilled_salmon", "chicken_curry", "bibimbap", "pho", "tacos",
     "nachos", "waffles", "pancakes", "omelette",
     "caesar_salad", "greek_salad", "chocolate_cake", "cheesecake", "ice_cream",
-    "donuts", "apple_pie", "strawberry_shortcake", "miso_soup", "edamame"
+    "donuts", "apple_pie", "strawberry_shortcake", "miso_soup", "edamame",
+    "burger", "dal_bhat", "kheer", "sel_roti",
 ]
 
-TRAIN_RATIO = 0.70   
-VAL_RATIO   = 0.15   
-TEST_RATIO  = 0.15   
+TRAIN_RATIO = 0.70
+VAL_RATIO   = 0.15
+TEST_RATIO  = 0.15
 
-IMAGE_SIZE  = 224    # ResNet/EfficientNet standard input size
+IMAGE_SIZE  = 224
 BATCH_SIZE  = 32
 
 
 def build_split_folders():
     """
-    Copies images from Food-101 into a clean train/val/test structure.
+    Copies images from Food-101 and parikar into a clean train/val/test structure.
     Output:
         dataset/train/pizza/...
         dataset/val/pizza/...
@@ -56,12 +63,20 @@ def build_split_folders():
             (Path(OUTPUT_DIR) / split / cls).mkdir(parents=True, exist_ok=True)
 
     for cls in SELECTED_CLASSES:
-        cls_src = src_images / cls
+        # Pick source folder — parikar for new classes, food-101 for the rest
+        if cls in PARIKAR_CLASSES:
+            cls_src = Path(PARIKAR_ROOT) / PARIKAR_CLASSES[cls]
+        else:
+            cls_src = src_images / cls
+
         if not cls_src.exists():
             print(f"    Class '{cls}' not found in dataset, skipping.")
             continue
 
-        images = list(cls_src.glob("*.jpg"))
+        # Support jpg, jpeg, png for parikar images
+        images = (list(cls_src.glob("*.jpg")) +
+                  list(cls_src.glob("*.jpeg")) +
+                  list(cls_src.glob("*.png")))
         random.shuffle(images)
 
         n       = len(images)
@@ -86,18 +101,17 @@ def build_split_folders():
 
 
 def get_transforms():
- 
     mean = [0.485, 0.456, 0.406]
     std  = [0.229, 0.224, 0.225]
 
     train_transform = transforms.Compose([
-        transforms.RandomResizedCrop(IMAGE_SIZE),   # random zoom + crop
-        transforms.RandomHorizontalFlip(),           # flip left/right
-        transforms.ColorJitter(                      # vary brightness/contrast
+        transforms.RandomResizedCrop(IMAGE_SIZE),
+        transforms.RandomHorizontalFlip(),
+        transforms.ColorJitter(
             brightness=0.3, contrast=0.3,
             saturation=0.3, hue=0.05
         ),
-        transforms.RandomRotation(15),              # slight rotation
+        transforms.RandomRotation(15),
         transforms.ToTensor(),
         transforms.Normalize(mean, std),
     ])
@@ -144,7 +158,6 @@ def show_samples(loader, classes, n=16):
     images = images[:n]
     labels = labels[:n]
 
-    # un-normalize for display
     images = images * std + mean
     images = images.clamp(0, 1)
 
@@ -168,14 +181,10 @@ if __name__ == "__main__":
     print("  STEP 1 — Prepare Dataset")
     print("=" * 55)
 
-    # 1. Build folders
     build_split_folders()
-
-    # 2. Create loaders
     train_loader, val_loader, test_loader, classes = get_dataloaders()
 
-    # 3. Show samples
     print("\nGenerating sample image grid...")
     show_samples(train_loader, classes)
 
-    print(" Data preparation complete!")
+    print("Data preparation complete!")

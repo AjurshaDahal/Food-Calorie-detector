@@ -20,7 +20,7 @@ from model.calorie_db import (
 )
 
 CHECKPOINT_PATH = os.path.join(
-    os.path.dirname(__file__), "checkpoints", "best_model.pth"
+    os.path.dirname(__file__), "..", "checkpoints", "best_model_32.pth"
 )
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

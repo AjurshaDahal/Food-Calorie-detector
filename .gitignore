@@ -1,5 +1,6 @@
 dataset/
 food-101/
+parikar/
 checkpoints/
 __pycache__/
 *.pyc

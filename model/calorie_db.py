@@ -44,6 +44,10 @@ FOOD_DESCRIPTIONS = {
     "strawberry_shortcake": "Sponge cake with strawberries and cream",
     "miso_soup": "Japanese fermented soybean broth",
     "edamame": "Steamed young soybeans in pods",
+    "burger":   "Juicy beef patty in a bun with fresh toppings",
+    "dal_bhat": "Nepali staple — steamed rice with lentil soup",
+    "kheer":    "Nepali creamy rice pudding with cardamom and nuts",
+    "sel_roti": "Nepali traditional ring-shaped rice flour donut",
 }
 
 
@@ -77,6 +81,11 @@ FOOD_CATEGORIES = {
     "strawberry_shortcake": "dessert",
     "miso_soup": "japanese",
     "edamame": "japanese",
+    "burger":   "american",
+    "dal_bhat": "nepali",
+    "kheer":    "nepali",
+    "sel_roti": "nepali",
+
 }
 
 # Emoji icons per food for the database grid
@@ -89,7 +98,8 @@ FOOD_EMOJIS = {
     "caesar_salad": "🥗", "greek_salad": "🥗",
     "chocolate_cake": "🍫", "cheesecake": "🍰", "ice_cream": "🍨",
     "donuts": "🍩", "apple_pie": "🥧", "strawberry_shortcake": "🍓",
-    "miso_soup": "🍵", "edamame": "🫘",
+    "miso_soup": "🍵", "edamame": "🫘", "burger":   "🍔", "dal_bhat": "🍛",
+    "kheer":    "🍮", "sel_roti": "🍩",
 }
 
 
