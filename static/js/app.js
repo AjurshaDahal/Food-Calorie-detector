@@ -5,20 +5,6 @@ const categories = {
     healthy: ['salad', 'seafood'],
 };
 
-// Cute food emojis based on category or name
-function getFoodEmoji(item) {
-    const name = item.name.toLowerCase();
-    if (name.includes('pizza')) return '🍕';
-    if (name.includes('burger')) return '🍔';
-    if (name.includes('sushi')) return '🍣';
-    if (name.includes('salad')) return '🥗';
-    if (name.includes('cake') || name.includes('dessert')) return '🍰';
-    if (name.includes('taco')) return '🌮';
-    if (name.includes('ramen') || name.includes('noodle')) return '🍜';
-    if (name.includes('ice cream')) return '🍦';
-    return '🍽️';
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     // 1. Tab Navigation
     const navBtns = document.querySelectorAll('.nav-btn');
@@ -106,14 +92,36 @@ document.addEventListener('DOMContentLoaded', function () {
         reader.readAsDataURL(file);
     }
 
+    // Toggles
+    let currentPortionType = 'grams';
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+    
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            toggleBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentPortionType = btn.dataset.type;
+            
+            if (currentPortionType === 'grams') {
+                itemCount.value = 100;
+                itemCount.step = 10;
+            } else {
+                itemCount.value = 1;
+                itemCount.step = 1;
+            }
+        });
+    });
+
     // Counter
     countDecrease.addEventListener('click', () => {
-        let v = parseInt(itemCount.value) || 1;
-        if (v > 1) itemCount.value = v - 1;
+        let v = parseInt(itemCount.value) || (currentPortionType === 'grams' ? 100 : 1);
+        let step = currentPortionType === 'grams' ? 10 : 1;
+        if (v > step) itemCount.value = v - step;
     });
     countIncrease.addEventListener('click', () => {
-        let v = parseInt(itemCount.value) || 1;
-        if (v < 99) itemCount.value = v + 1;
+        let v = parseInt(itemCount.value) || (currentPortionType === 'grams' ? 100 : 1);
+        let step = currentPortionType === 'grams' ? 10 : 1;
+        itemCount.value = v + step;
     });
 
     // Analyze Action
@@ -129,59 +137,106 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const form = new FormData();
         form.append('image', selectedFile);
-        const count = parseInt(itemCount.value);
-        if (count > 1) form.append('item_count', count);
+        form.append('portion_type', currentPortionType);
+        const portion = parseInt(itemCount.value);
+        if (portion) form.append('portion_value', portion);
 
         try {
             const res = await fetch('/api/analyze', { method: 'POST', body: form });
             const data = await res.json();
             
-            resultsPlaceholder.style.display = 'none';
-            resultsDisplay.style.display = 'block';
-
-            if (data.success && data.detected) {
-                resultSuccess.style.display = 'block';
-                resultFail.style.display = 'none';
-
-                const n = data.nutrition;
-                document.getElementById('food-name').textContent = n.food_name;
-                document.getElementById('food-description').textContent = n.description;
-                document.getElementById('confidence-value').textContent = data.confidence;
-                
-                animateValue('calorie-number', 0, n.total_calories, 800);
-                document.getElementById('serving-value').textContent = `for ${n.serving_size} ${n.count > 1 ? '(x' + n.count + ')' : ''}`;
-
-                document.getElementById('protein-value').textContent = n.protein_g + 'g';
-                document.getElementById('carbs-value').textContent = n.carbs_g + 'g';
-                document.getElementById('fat-value').textContent = n.fat_g + 'g';
-                document.getElementById('fiber-value').textContent = n.fiber_g + 'g';
-
-                if (data.note) {
-                    document.getElementById('result-note').style.display = 'flex';
-                    document.getElementById('note-text').textContent = data.note;
-                } else {
-                    document.getElementById('result-note').style.display = 'none';
-                }
-            } else {
-                resultSuccess.style.display = 'none';
-                resultFail.style.display = 'flex';
-                document.getElementById('not-detected-message').textContent = data.message || "We couldn't recognize this food.";
-                document.getElementById('not-detected-suggestion').textContent = data.suggestion || "Try another photo.";
-            }
-
+            renderMainResult(data);
         } catch (err) {
-            resultsPlaceholder.style.display = 'none';
-            resultsDisplay.style.display = 'block';
-            resultSuccess.style.display = 'none';
-            resultFail.style.display = 'flex';
-            document.getElementById('not-detected-message').textContent = "Connection error.";
-            document.getElementById('not-detected-suggestion').textContent = "Make sure the server is running.";
+            renderMainResult({
+                success: false, 
+                message: "Connection error.", 
+                suggestion: "Make sure the server is running."
+            });
         }
 
         btnText.style.display = 'inline';
         btnLoading.style.display = 'none';
         analyzeBtn.disabled = false;
     });
+
+
+
+    function renderMainResult(data) {
+        resultsPlaceholder.style.display = 'none';
+        resultsDisplay.style.display = 'block';
+
+        if (data.success && data.detected) {
+            resultSuccess.style.display = 'block';
+            resultFail.style.display = 'none';
+
+            const n = data.nutrition;
+            document.getElementById('food-name').textContent = n.food_name;
+            document.getElementById('food-description').textContent = n.description;
+            document.getElementById('confidence-value').textContent = data.confidence;
+            
+            animateValue('calorie-number', 0, n.total_calories, 800);
+            document.getElementById('serving-value').textContent = `for ${n.serving_size}`;
+
+            document.getElementById('protein-value').textContent = n.protein_g + 'g';
+            document.getElementById('carbs-value').textContent = n.carbs_g + 'g';
+            document.getElementById('fat-value').textContent = n.fat_g + 'g';
+            document.getElementById('fiber-value').textContent = n.fiber_g + 'g';
+
+
+            if (data.note) {
+                document.getElementById('result-note').style.display = 'flex';
+                document.getElementById('note-text').textContent = data.note;
+            } else {
+                document.getElementById('result-note').style.display = 'none';
+            }
+        } else {
+            resultSuccess.style.display = 'none';
+            resultFail.style.display = 'flex';
+            document.getElementById('not-detected-message').textContent = data.message || "We couldn't recognize this food.";
+            document.getElementById('not-detected-suggestion').textContent = data.suggestion || "Try another photo.";
+            
+            if (data.top_predictions && data.top_predictions.length > 0) {
+                const fallbackContainer = document.getElementById('fallback-container');
+                const fallbackButtons = document.getElementById('fallback-buttons');
+                fallbackContainer.style.display = 'block';
+                
+                fallbackButtons.innerHTML = data.top_predictions.map(pred => {
+                    const key = pred.food.toLowerCase().replace(/ /g, '_');
+                    return `<button class="filter-btn" style="border-color:var(--color-caramel);" onclick="window._forceResult('${key}', ${pred.confidence})">${pred.food} <span style="opacity:0.6;font-size:11px;">${pred.confidence}%</span></button>`;
+                }).join('');
+            } else {
+                const fallbackContainer = document.getElementById('fallback-container');
+                if (fallbackContainer) fallbackContainer.style.display = 'none';
+            }
+        }
+    }
+
+    window._forceResult = async function(key, confidence) {
+        const portion = parseInt(document.getElementById('item-count').value);
+        const portionType = currentPortionType;
+        
+        try {
+            const res = await fetch('/api/manual-lookup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ food_key: key, portion_type: portionType, portion_value: portion })
+            });
+            const data = await res.json();
+            if (data.success) {
+                renderMainResult({
+                    success: true,
+                    detected: true,
+                    confidence: confidence || "Manual",
+                    nutrition: data.nutrition,
+                    note: "Manually selected from top predictions."
+                });
+            }
+        } catch (e) {
+            console.error("Force result failed", e);
+        }
+    };
+
+
 
     function animateValue(id, start, end, duration) {
         const obj = document.getElementById(id);
@@ -225,10 +280,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         foodGrid.innerHTML = foods.map(f => {
-            const emoji = getFoodEmoji(f);
             return `
             <div class="food-card" onclick="window._lookupFood('${f.key}')">
-                <div class="f-icon">${emoji}</div>
+                <div class="f-icon">${f.emoji || '🍽️'}</div>
                 <div class="f-name">${f.name}</div>
                 <div class="f-cat">${f.category.replace('_', ' ')}</div>
                 <div class="f-cal">${f.calories} <span>kcal / ${f.serving_size}</span></div>

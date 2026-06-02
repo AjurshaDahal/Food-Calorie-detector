@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriLens</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -29,6 +30,7 @@
         <!-- 1. HOME TAB -->
         <section id="tab-home" class="tab-content active">
             <div class="hero-card">
+                <div class="hero-blob"></div>
                 <h1>Discover what's on your plate.</h1>
                 <p>NutriLens uses a trained neural network to identify your food and estimate its nutritional value in seconds. Sweet, simple, and beautifully accurate.</p>
                 <button class="action-btn primary-btn mt-4" id="go-to-analyze">Start Scanning</button>
@@ -85,12 +87,18 @@
                         <input type="file" id="file-input" accept="image/*" hidden>
                     </div>
 
-                    <div class="controls-row" id="count-section" style="display:none;">
-                        <span class="controls-label">Portion count</span>
-                        <div class="counter-widget">
-                            <button id="count-decrease">−</button>
-                            <input type="number" id="item-count" value="1" min="1" max="99">
-                            <button id="count-increase">+</button>
+                    <div class="controls-row" id="count-section" style="display:none; flex-direction:column; align-items:flex-start; gap:12px;">
+                        <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                            <span class="controls-label">Portion</span>
+                            <div class="toggle-switch">
+                                <button type="button" class="toggle-btn active" data-type="grams">Grams</button>
+                                <button type="button" class="toggle-btn" data-type="items">Items</button>
+                            </div>
+                        </div>
+                        <div class="counter-widget" style="width:100%; justify-content:space-between;">
+                            <button id="count-decrease" type="button">−</button>
+                            <input type="number" id="item-count" value="100" min="1" step="10" style="width:100%;">
+                            <button id="count-increase" type="button">+</button>
                         </div>
                     </div>
 
@@ -158,9 +166,14 @@
 
                     <div id="result-fail" style="display:none;" class="empty-state">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-                        <h3 class="mt-4">Couldn't identify this dish</h3>
+                        <h3 class="mt-4">Couldn't confidently identify this dish</h3>
                         <p id="not-detected-message" class="text-sm mt-2"></p>
                         <p id="not-detected-suggestion" class="text-xs text-muted mt-2"></p>
+                        
+                        <div id="fallback-container" style="display:none; margin-top:24px; width:100%;">
+                            <h4 style="font-size:14px; margin-bottom:12px; color:var(--color-dark); font-family:'Outfit', sans-serif;">Did you mean?</h4>
+                            <div id="fallback-buttons" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;"></div>
+                        </div>
                     </div>
 
                 </div>
