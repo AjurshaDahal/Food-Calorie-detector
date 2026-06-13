@@ -275,6 +275,6 @@ if __name__ == "__main__":
     }, CHECKPOINT_OUT)
 
     print(f"\n{'='*55}")
-    print(f"  ✅ Done! Best val_acc={best_acc:.3f}")
+    print(f"  Done! Best val_acc={best_acc:.3f}")
     print(f"  Total classes: {len(all_classes)}")
     print(f"  Classes: {all_classes}")

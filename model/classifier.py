@@ -1,10 +1,3 @@
-"""
-Food Classifier Module
-=======================
-Wraps the ResNet50 model from the project's checkpoint into a clean
-class that app.py can use for image analysis.
-"""
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -24,15 +17,10 @@ CHECKPOINT_PATH = os.path.join(
 )
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Confidence threshold — below this we say "not recognized"
 CONFIDENCE_THRESHOLD = 15.0
 
 
 class FoodClassifier:
-    """
-    Loads the trained ResNet50 checkpoint and provides a .predict() method
-    that returns the JSON structure the BhojanLens frontend expects.
-    """
 
     def __init__(self):
         self.device = DEVICE
@@ -49,7 +37,6 @@ class FoodClassifier:
         self._load_model()
 
     def _load_model(self):
-        """Load the ResNet50 checkpoint."""
         if not os.path.exists(CHECKPOINT_PATH):
             print(f"[WARN] Checkpoint not found at {CHECKPOINT_PATH}")
             print("       The classifier will return dummy predictions.")
@@ -74,22 +61,8 @@ class FoodClassifier:
 
     @torch.no_grad()
     def predict(self, image_path: str, portion_type: str = "grams", portion_value: int = None) -> dict:
-        """
-        Classify a food image and return nutrition data.
-
-        Returns a dict matching the JSON contract expected by app.js:
-        {
-            success, detected, confidence, model_used,
-            nutrition: { food_name, description, serving_size,
-                         total_calories, calories_per_unit, count,
-                         protein_g, carbs_g, fat_g, fiber_g },
-            top_predictions: [ { class, confidence } ],
-            note
-        }
-        """
         val = max(int(portion_value), 1) if portion_value else None
 
-        # If model not loaded, return graceful error
         if self.model is None:
             return {
                 "success": True,
@@ -99,7 +72,6 @@ class FoodClassifier:
                 "top_predictions": [],
             }
 
-        # Load and preprocess the image
         try:
             pil_img = Image.open(image_path).convert("RGB")
         except Exception as e:
@@ -115,7 +87,6 @@ class FoodClassifier:
         best_food = self.class_names[top_i[0].item()]
         best_conf = round(top_p[0].item() * 100, 1)
 
-        # Build top predictions list
         top_predictions = []
         for p, i in zip(top_p.cpu().tolist(), top_i.cpu().tolist()):
             food_name = self.class_names[i]
@@ -124,7 +95,6 @@ class FoodClassifier:
                 "confidence": round(p * 100, 1),
             })
 
-        # Check confidence threshold
         if best_conf < CONFIDENCE_THRESHOLD:
             return {
                 "success": True,
@@ -135,7 +105,6 @@ class FoodClassifier:
                 "top_predictions": top_predictions,
             }
 
-        # Get nutrition data
         nutrition = calculate_total_calories(best_food, portion_type, val)
         if nutrition is None:
             v = val if val else (100 if portion_type == "grams" else 1)
@@ -159,5 +128,4 @@ class FoodClassifier:
         }
 
     def get_supported_foods(self) -> list[dict]:
-        """Return all foods from the nutrition database for the food grid."""
         return get_all_foods()

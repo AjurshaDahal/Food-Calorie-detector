@@ -12,18 +12,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Remove active classes
             navBtns.forEach(b => b.classList.remove('active'));
             tabContents.forEach(tc => tc.classList.remove('active'));
             
-            // Add active class to clicked
             btn.classList.add('active');
             const targetId = btn.getAttribute('data-tab');
             document.getElementById(targetId).classList.add('active');
         });
     });
 
-    // Link from Home to Analyze
     document.getElementById('go-to-analyze').addEventListener('click', () => {
         document.querySelector('.nav-btn[data-tab="tab-analyze"]').click();
     });
@@ -51,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let selectedFile = null;
 
-    // File Upload
     browseBtn.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
     dropZone.addEventListener('click', () => { if (!selectedFile) fileInput.click(); });
     fileInput.addEventListener('change', function() { if (this.files[0]) handleFile(this.files[0]); });
@@ -92,7 +88,6 @@ document.addEventListener('DOMContentLoaded', function () {
         reader.readAsDataURL(file);
     }
 
-    // Toggles
     let currentPortionType = 'grams';
     const toggleBtns = document.querySelectorAll('.toggle-btn');
     

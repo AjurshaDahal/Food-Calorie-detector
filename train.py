@@ -10,24 +10,20 @@ import numpy as np
 import time
 import copy
 
-# CONFIG 
 
 DATASET_DIR    = "./dataset"
 CHECKPOINT_DIR = "./checkpoints"
 IMAGE_SIZE     = 224
 BATCH_SIZE     = 32
 
-# Phase 1 — train only the classifier head
 PHASE1_EPOCHS  = 5
 PHASE1_LR      = 1e-3
 
-# Phase 2 — fine-tune the whole network
 PHASE2_EPOCHS  = 20
 PHASE2_LR      = 1e-4
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-#  DATA 
 
 def get_dataloaders():
     mean = [0.485, 0.456, 0.406]
@@ -59,20 +55,13 @@ def get_dataloaders():
     return train_loader, val_loader, train_ds.classes
 
 
-# MODEL 
 
 def build_model(num_classes: int):
-    """
-    ResNet50 pretrained on ImageNet.
-    We replace the final fully-connected layer so output = num_classes.
-    """
     model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2)
 
-    # Freeze ALL layers first (we unfreeze in Phase 2)
     for param in model.parameters():
         param.requires_grad = False
 
-    # Replace final layer — only THIS layer trains in Phase 1
     in_features = model.fc.in_features
     model.fc = nn.Sequential(
         nn.Dropout(0.4),
@@ -82,7 +71,6 @@ def build_model(num_classes: int):
     return model.to(DEVICE)
 
 
-# TRAINING LOOP
 
 def train_one_epoch(model, loader, criterion, optimizer):
     model.train()
@@ -125,7 +113,6 @@ def evaluate(model, loader, criterion):
 
 def run_phase(model, train_loader, val_loader,
               num_epochs, lr, phase_name, best_acc, best_weights):
-    """Generic training phase — returns updated best_acc and best_weights."""
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.AdamW(
         filter(lambda p: p.requires_grad, model.parameters()),
@@ -157,7 +144,6 @@ def run_phase(model, train_loader, val_loader,
         history["train_acc"].append(train_acc)
         history["val_acc"].append(val_acc)
 
-        # Save best model
         if val_acc > best_acc:
             best_acc     = val_acc
             best_weights = copy.deepcopy(model.state_dict())
@@ -166,17 +152,15 @@ def run_phase(model, train_loader, val_loader,
                 "epoch"      : epoch,
                 "model_state": best_weights,
                 "val_acc"    : best_acc,
-                "classes"    : class_names,   # saved globally below
+                "classes"    : class_names,
             }, ckpt_path)
             print(f"    💾 Best model saved (val_acc={best_acc:.3f})")
 
     return best_acc, best_weights, history
 
 
-# PLOTTING 
 
 def plot_history(h1, h2):
-    """Combine Phase 1 + Phase 2 history and plot curves."""
     tl = h1["train_loss"] + h2["train_loss"]
     vl = h1["val_loss"]   + h2["val_loss"]
     ta = h1["train_acc"]  + h2["train_acc"]
@@ -204,7 +188,6 @@ def plot_history(h1, h2):
     print("Training curves saved to 'training_curves.png'")
 
 
-# MAIN 
 
 if __name__ == "__main__":
     Path(CHECKPOINT_DIR).mkdir(exist_ok=True)
@@ -213,19 +196,16 @@ if __name__ == "__main__":
     if DEVICE.type == "cuda":
         print(f"GPU: {torch.cuda.get_device_name(0)}")
 
-    # Load data
     train_loader, val_loader, class_names = get_dataloaders()
     num_classes = len(class_names)
     print(f"\nClasses ({num_classes}): {class_names}")
 
-    # Build model
     model = build_model(num_classes)
     print(f"\nModel: ResNet50 (pretrained) → {num_classes} classes")
 
     best_acc     = 0.0
     best_weights = None
 
-    # Phase 1: train only the new head 
     best_acc, best_weights, h1 = run_phase(
         model, train_loader, val_loader,
         num_epochs=PHASE1_EPOCHS, lr=PHASE1_LR,
@@ -233,7 +213,6 @@ if __name__ == "__main__":
         best_acc=best_acc, best_weights=best_weights
     )
 
-    # Phase 2: unfreeze all layers and fine-tune
     print("\nUnfreezing all layers for fine-tuning...")
     for param in model.parameters():
         param.requires_grad = True
@@ -245,10 +224,9 @@ if __name__ == "__main__":
         best_acc=best_acc, best_weights=best_weights
     )
 
-    print(f"\n✅ Training complete!  Best val accuracy: {best_acc:.3f}")
+    print(f"\nTraining complete!  Best val accuracy: {best_acc:.3f}")
     print(f"   Checkpoint saved to '{CHECKPOINT_DIR}/best_model.pth'")
 
-    # Plot
     plot_history(h1, h2)
 
     print("\n   Next step → run  step3_inference.py")

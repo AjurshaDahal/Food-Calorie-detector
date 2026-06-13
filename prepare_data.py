@@ -40,13 +40,6 @@ BATCH_SIZE  = 32
 
 
 def build_split_folders():
-    """
-    Copies images from Food-101 and parikar into a clean train/val/test structure.
-    Output:
-        dataset/train/pizza/...
-        dataset/val/pizza/...
-        dataset/test/pizza/...
-    """
     src_images = Path(FOOD101_ROOT) / "images"
 
     if not src_images.exists():
@@ -150,7 +143,6 @@ def get_dataloaders():
 
 
 def show_samples(loader, classes, n=16):
-    """Plot a grid of sample images so you can verify loading is correct."""
     mean = torch.tensor([0.485, 0.456, 0.406]).view(3,1,1)
     std  = torch.tensor([0.229, 0.224, 0.225]).view(3,1,1)
 

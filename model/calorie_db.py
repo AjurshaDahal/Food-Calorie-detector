@@ -1,18 +1,9 @@
-"""
-Calorie Database Module
-Wraps the project's NUTRITION_DB and DEFAULT_SERVING_G from inference.py
-into the API surface that app.py and the frontend expect.
-"""
-
 import sys, os
 
-# Ensure project root is importable
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from inference import NUTRITION_DB, DEFAULT_SERVING_G, PORTION_MULTIPLIERS
 
-
-# ─── Food descriptions (mirrors demo.py) ───────────────────────────────────
 
 FOOD_DESCRIPTIONS = {
     "pizza": "Italian flatbread with tomato sauce and toppings",
@@ -50,7 +41,6 @@ FOOD_DESCRIPTIONS = {
 }
 
 
-# Food category for display in the food database grid
 FOOD_CATEGORIES = {
     "pizza": "italian",
     "hot_dog": "american",
@@ -90,9 +80,6 @@ FOOD_CATEGORIES = {
 
 
 def get_food_info(food_key: str) -> dict | None:
-    """
-    Return a rich info dict for a single food, or None if not in the DB.
-    """
     key = food_key.lower().replace(" ", "_")
     n = NUTRITION_DB.get(key)
     if n is None:
@@ -131,10 +118,6 @@ SINGLE_UNIT_WEIGHT_G = {
 }
 
 def calculate_total_calories(food_key: str, portion_type: str = "grams", portion_value: int = None) -> dict | None:
-    """
-    Get full nutrition for a food, based on exact gram portion size or count.
-    Returns the structure the frontend modal expects.
-    """
     key = food_key.lower().replace(" ", "_")
     n = NUTRITION_DB.get(key)
     if n is None:
@@ -151,7 +134,6 @@ def calculate_total_calories(food_key: str, portion_type: str = "grams", portion
         grams = max(int(portion_value), 1) if portion_value else DEFAULT_SERVING_G.get(key, 100)
         serving_str = f"{grams}g"
     
-    # NUTRITION_DB is per 100g. 
     f = grams / 100.0
 
     total_cal = round(n["calories"] * f)
@@ -171,10 +153,6 @@ def calculate_total_calories(food_key: str, portion_type: str = "grams", portion
 
 
 def get_all_foods() -> list[dict]:
-    """
-    Return a list of all foods in the database, formatted for the
-    frontend food-grid cards.
-    """
     foods = []
     for key in NUTRITION_DB:
         info = get_food_info(key)
@@ -196,8 +174,4 @@ def get_all_foods() -> list[dict]:
 
 
 def get_nepali_foods_list() -> list[dict]:
-    """
-    No Nepali-specific foods in the current database.
-    Returns empty list — the frontend will hide the tab accordingly.
-    """
     return []

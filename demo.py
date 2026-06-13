@@ -89,17 +89,14 @@ def predict_gradio(image, item_count):
     total_fat     = round(n["fat_g"]     * count, 1)
     total_fiber   = round(n["fiber_g"]   * count, 1)
 
-    # Calorie ring color
     if total_cal < 300:   ring = "#22c55e"
     elif total_cal < 600: ring = "#f97316"
     else:                 ring = "#ef4444"
 
-    # Confidence bar color
     if best_conf >= 80:   conf_color = "#22c55e"
     elif best_conf >= 50: conf_color = "#f97316"
     else:                 conf_color = "#ef4444"
 
-    # SVG donut ring
     radius = 54
     circ   = 2 * 3.14159 * radius
     pct    = min(total_cal / 1000, 1.0)
@@ -110,7 +107,6 @@ def predict_gradio(image, item_count):
     <div style="font-family:'Segoe UI',system-ui,sans-serif; background:#f8fafc; border-radius:20px;
                 padding:0; overflow:hidden; border:1px solid #e2e8f0; box-shadow:0 4px 24px rgba(0,0,0,0.08);">
 
-      <!-- Header -->
       <div style="background:white; padding:20px 24px 16px; border-bottom:1px solid #f1f5f9;">
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
           <div style="background:#dcfce7; border-radius:10px; width:40px; height:40px;
@@ -121,7 +117,6 @@ def predict_gradio(image, item_count):
           </div>
         </div>
 
-        <!-- Food card -->
         <div style="background:#f8fafc; border-radius:14px; padding:16px; border:1px solid #e2e8f0;">
           <div style="font-size:1.25em; font-weight:700; color:#0f172a; margin-bottom:4px;">{display_name}</div>
           <div style="font-size:0.85em; color:#64748b; margin-bottom:12px;">{desc}</div>
@@ -135,11 +130,9 @@ def predict_gradio(image, item_count):
         </div>
       </div>
 
-      <!-- Calories + serving -->
       <div style="padding:20px 24px; background:white; margin-top:8px;">
         <div style="display:flex; align-items:center; gap:20px;">
 
-          <!-- SVG donut -->
           <div style="position:relative; width:130px; height:130px; flex-shrink:0;">
             <svg width="130" height="130" viewBox="0 0 130 130">
               <circle cx="65" cy="65" r="{radius}" fill="none" stroke="#f1f5f9" stroke-width="12"/>
@@ -155,7 +148,6 @@ def predict_gradio(image, item_count):
             </div>
           </div>
 
-          <!-- Serving info -->
           <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
             <div style="background:#f8fafc; border-radius:12px; padding:12px 16px;
                         border:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
@@ -171,7 +163,6 @@ def predict_gradio(image, item_count):
         </div>
       </div>
 
-      <!-- Macros -->
       <div style="padding:0 24px 20px; background:white;">
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:10px;">
           {macro_card("🥩", total_protein, "g", "PROTEIN", "#3b82f6", "#eff6ff")}
@@ -181,7 +172,6 @@ def predict_gradio(image, item_count):
         </div>
       </div>
 
-      <!-- Footer note -->
       <div style="background:#f8fafc; padding:12px 24px; border-top:1px solid #f1f5f9;
                   font-size:0.75em; color:#94a3b8; text-align:center;">
         ℹ️ Calorie estimation is approximate and may vary based on portion size, preparation method, and ingredients.
@@ -213,7 +203,6 @@ def build_empty_html():
     </div>"""
 
 
-# ─── CUSTOM CSS ──────────────────────────────────────────────────────────────
 
 css = """
 body { background: #f1f5f9 !important; }
@@ -234,7 +223,6 @@ body { background: #f1f5f9 !important; }
 footer { display: none !important; }
 """
 
-# ─── UI ──────────────────────────────────────────────────────────────────────
 
 with gr.Blocks(css=css) as demo:
 
@@ -243,7 +231,6 @@ with gr.Blocks(css=css) as demo:
         gr.Markdown("Get instant calorie estimates from a photo")
 
     with gr.Row(equal_height=True):
-        # Left panel
         with gr.Column(scale=1, elem_classes="input-panel"):
             image_input = gr.Image(
                 sources=["upload", "webcam"],
@@ -262,7 +249,6 @@ with gr.Blocks(css=css) as demo:
 
             submit_btn = gr.Button("🔍 Analyze Food", variant="primary", size="lg")
 
-        # Right panel
         with gr.Column(scale=1):
             result_html = gr.HTML(value=build_empty_html())
 

@@ -99,7 +99,7 @@ def load_model():
     model.fc = nn.Sequential(nn.Dropout(0.4), nn.Linear(model.fc.in_features, num_classes))
     model.load_state_dict(ckpt["model_state"])
     model.to(DEVICE).eval()
-    print(f"✅ Model loaded — {num_classes} classes, val_acc={ckpt['val_acc']:.3f}")
+    print(f"Model loaded — {num_classes} classes, val_acc={ckpt['val_acc']:.3f}")
     return model, class_names
 
 
@@ -132,7 +132,7 @@ def predict(model, class_names, image_path, weight_g=None, portion="Medium", top
 
 def print_results(results):
     print("\n" + "="*55)
-    print("  🍽️  FOOD NUTRITION ESTIMATOR")
+    print("   FOOD NUTRITION ESTIMATOR")
     print("="*55)
     for r in results:
         n = r["nutrition"]
@@ -143,7 +143,7 @@ def print_results(results):
             print(f"      Protein   : {n['protein_g']}g  |  Carbs: {n['carbs_g']}g  |  Fat: {n['fat_g']}g")
             print(f"      Fiber     : {n['fiber_g']}g  |  Sugar: {n['sugar_g']}g  |  Sodium: {n['sodium_mg']}mg")
         else:
-            print(f"      ⚠️  {n['error']}")
+            print(f"      {n['error']}")
     print()
 
 
