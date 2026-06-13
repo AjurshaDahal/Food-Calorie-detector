@@ -19,7 +19,7 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16 MB max upload
+app.config["MAX_CONTENT_LENGTH"] = 32 * 1024 * 1024  # 32 MB max upload for high-res images
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp", "bmp"}
 

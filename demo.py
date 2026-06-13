@@ -143,7 +143,7 @@ def predict_gradio(image, item_count):
             </svg>
             <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
                         text-align:center; line-height:1.1;">
-              <div style="font-size:1.6em; font-weight:800; color:#0f172a;">{total_cal}</div>
+              <div style="font-size:1.6em; font-weight:800; color:#0f172a;">{total_cal:,}</div>
               <div style="font-size:0.7em; color:#94a3b8; font-weight:600; letter-spacing:0.05em;">KCAL</div>
             </div>
           </div>
