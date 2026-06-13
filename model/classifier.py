@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from torchvision import models, transforms
 from PIL import Image
 import os
+import time
 
 from model.calorie_db import (
     get_food_info,
@@ -61,6 +62,7 @@ class FoodClassifier:
 
     @torch.no_grad()
     def predict(self, image_path: str, portion_type: str = "grams", portion_value: int = None) -> dict:
+        start_time = time.time()
         val = max(int(portion_value), 1) if portion_value else None
 
         if self.model is None:
@@ -120,6 +122,7 @@ class FoodClassifier:
             "success": True,
             "detected": True,
             "confidence": best_conf,
+            "inference_time_ms": int((time.time() - start_time) * 1000),
             "model_used": "ResNet50 (Food-101)",
             "nutrition": nutrition,
             "top_predictions": top_predictions,

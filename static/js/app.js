@@ -76,6 +76,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function handleFile(file) {
+        if (file.size > 32 * 1024 * 1024) {
+            alert("File is too large. Maximum allowed size is 32MB.");
+            return;
+        }
         selectedFile = file;
         const reader = new FileReader();
         reader.onload = (e) => {
